@@ -1,3 +1,8 @@
+# unreleased
+------------------------------
+
+ - [petanque] Check `proof_finished` without reifying goals (@remix7531, #1120)
+
 # coq-lsp 0.2.5: New epoch
 --------------------------
 

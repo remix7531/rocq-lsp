@@ -24,6 +24,12 @@ module Proof : sig
   val hash : t -> int
   val to_coq : t -> Vernacstate.LemmaStack.t
   val name : t -> string
+
+  (** [no_open_goals proof] is true exactly when [proof] has no active goals, no
+      goals on either side of any focus stack frame, and no shelved or given-up
+      goals. *)
+  val no_open_goals : t -> bool
+
   val statements : token:Limits.Token.t -> t -> (string list, Loc.t) Protect.E.t
 
   module Program : sig

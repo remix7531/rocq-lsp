@@ -1,3 +1,8 @@
+# unreleased
+------------------------------
+
+ - [coq] Make `Workspace.hash` depend on the load path (@remix7531, #1122)
+
 # coq-lsp 0.2.5: New epoch
 --------------------------
 

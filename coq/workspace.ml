@@ -85,7 +85,16 @@ type t =
 let inject_requires ~extra_requires (ws : t) =
   { ws with require_libs = ws.require_libs @ extra_requires }
 
-let hash = Hashtbl.hash
+(* [Hashtbl.hash] walks [ws] breadth-first and stops after 10 meaningful values,
+   before it reaches the entries of [vo_load_path]. [Hashtbl.hash_param] is
+   capped at 256 nodes, which a long load path also exceeds, so we fold the
+   entries in one by one. *)
+let hash (ws : t) =
+  let hash_lp acc { Loadpath.unix_path; coq_path; _ } =
+    Hashtbl.hash (acc, unix_path, Names.DirPath.hash coq_path)
+  in
+  List.fold_left hash_lp (Hashtbl.hash ws) ws.vo_load_path
+
 let compare = Stdlib.compare
 
 (* Lib setup, XXX unify with sysinit *)

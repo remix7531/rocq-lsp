@@ -1,3 +1,8 @@
+# unreleased
+------------------------------
+
+ - [coq] Honour `-Q`, `-R` and `-I` in workspace arguments (@remix7531, #1121)
+
 # coq-lsp 0.2.5: New epoch
 --------------------------
 

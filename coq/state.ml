@@ -103,6 +103,14 @@ module Proof = struct
     Vernacstate.LemmaStack.get_top pst
     |> Declare.Proof.get_name |> Names.Id.to_string
 
+  let no_open_goals (pst : t) =
+    let proof = Vernacstate.LemmaStack.with_top pst ~f:Declare.Proof.get in
+    let { Proof.goals; stack; sigma; _ } = Proof.data proof in
+    goals = []
+    && Evd.shelf sigma = []
+    && (not (Evd.has_given_up sigma))
+    && List.for_all (fun (left, right) -> left = [] && right = []) stack
+
   let pp_st ~token env sigma
       ( (_ctx : Environ.named_context_val)
       , (_term : EConstr.constr)

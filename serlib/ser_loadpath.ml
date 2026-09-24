@@ -16,9 +16,10 @@
 (* Written by: Emilio J. Gallego Arias and others                       *)
 (************************************************************************)
 
+open Ppx_hash_lib.Std.Hash.Builtin
 open Sexplib.Std
 module Names = Ser_names
 
 type vo_path =
   [%import: Loadpath.vo_path]
-  [@@deriving sexp]
+  [@@deriving sexp, hash]

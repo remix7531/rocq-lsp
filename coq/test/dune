@@ -1,0 +1,4 @@
+(test
+ (name workspace_hash)
+ (modules workspace_hash)
+ (libraries coq))

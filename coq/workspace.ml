@@ -9,6 +9,7 @@
 (************************************************************************)
 
 module Flags_ = Flags
+open Ppx_hash_lib.Std.Hash.Builtin
 
 module Flags = struct
   type t =
@@ -17,6 +18,7 @@ module Flags = struct
     ; type_in_type : bool
     ; rewrite_rules : bool
     }
+  [@@deriving hash]
 
   let default =
     { impredicative_set = false
@@ -40,7 +42,7 @@ module Flags = struct
 end
 
 module Warning : sig
-  type t
+  type t [@@deriving hash]
 
   val make : string -> t
 
@@ -50,7 +52,7 @@ module Warning : sig
   (** *)
   val pp : Format.formatter -> t -> unit
 end = struct
-  type t = string
+  type t = string [@@deriving hash]
 
   let make x = x
 
@@ -66,26 +68,27 @@ module Require = struct
   type t =
     { library : string
     ; from : string option
-    ; flags : Vernacexpr.export_with_cats option
+    ; flags : Serlib.Ser_vernacexpr.export_with_cats option
     }
+  [@@deriving hash]
 end
 
 type t =
   { coqlib : string
   ; findlib_config : string option
   ; ocamlpath : string list
-  ; vo_load_path : Loadpath.vo_path list
+  ; vo_load_path : Serlib.Ser_loadpath.vo_path list
   ; require_libs : Require.t list
   ; flags : Flags.t
   ; warnings : Warning.t list
   ; kind : string
   ; debug : bool
   }
+[@@deriving hash]
 
 let inject_requires ~extra_requires (ws : t) =
   { ws with require_libs = ws.require_libs @ extra_requires }
 
-let hash = Hashtbl.hash
 let compare = Stdlib.compare
 
 (* Lib setup, XXX unify with sysinit *)

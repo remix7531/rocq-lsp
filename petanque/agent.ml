@@ -156,16 +156,6 @@ let protect_to_result (r : _ Coq.Protect.E.t) : (_, _) Result.t =
     Error Error.(make (Anomaly (Coq.Pp_t.to_string msg)) ~feedback)
   | { r = Completed (Ok r); feedback } -> Ok (r feedback)
 
-let proof_finished { Coq.Goals.goals; stack; shelf; given_up; _ } =
-  let check_stack stack =
-    List.(
-      for_all (fun (l, r) ->
-          Lang.Compat.List.is_empty l && Lang.Compat.List.is_empty r))
-      stack
-  in
-  List.for_all Lang.Compat.List.is_empty [ goals; shelf; given_up ]
-  && check_stack stack
-
 (* At some point we want to return both hashes *)
 module Hash_kind = struct
   type t =
@@ -188,11 +178,9 @@ let fb_print_string (lvl, { Coq.Message.Payload.msg; _ }) =
 
 let analyze_after_run ~hash st feedback =
   let proof_finished =
-    let goals = Fleche.Info.Goals.get_goals_unit ~compact:false ~st in
-    match goals with
+    match Coq.State.lemmas ~st with
     | None -> true
-    | Some goals when proof_finished goals -> true
-    | _ -> false
+    | Some proof -> Coq.State.Proof.no_open_goals proof
   in
   let hash = if hash then Hash_kind.hash ~kind:hash_mode st else None in
   let feedback = List.map fb_print_string feedback in

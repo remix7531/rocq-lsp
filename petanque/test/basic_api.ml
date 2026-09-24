@@ -94,6 +94,19 @@ let finished_stack_test ~token ~doc =
   let* st = Agent.run ~token ~st ~tac:"Qed." () in
   Agent.goals ~token ~st:(extract_st st) ()
 
+(* Shelved and given-up goals keep a proof unfinished. *)
+let unfinished_test ~token ~doc =
+  let open Coq.Compat.Result.O in
+  let check tac =
+    let* { st; _ } = Agent.start ~token ~doc ~thm:"i_want_to_be_searched" () in
+    let* { proof_finished; _ } = Agent.run ~token ~st ~tac () in
+    assert (not proof_finished);
+    Ok ()
+  in
+  let* () = check "shelve." in
+  let* () = check "admit." in
+  Ok None
+
 let multi_shot_test ~token ~doc =
   let open Coq.Compat.Result.O in
   let* { st; _ } = Agent.start ~token ~doc ~thm:"rev_snoc_cons" () in
@@ -148,7 +161,8 @@ let main () =
   let* g4 = fake_start_test ~token ~doc in
   let* g5 = run_at_pos_test ~token ~doc in
   let* g6 = get_proof_test ~token ~doc in
-  Ok [ g1; g2; g3; g4; g5; g6 ]
+  let* g7 = unfinished_test ~token ~doc in
+  Ok [ g1; g2; g3; g4; g5; g6; g7 ]
 
 let max = List.fold_left max min_int
 

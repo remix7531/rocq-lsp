@@ -1,7 +1,9 @@
 # unreleased
 ------------------------------
 
+ - [petanque] Check `proof_finished` without reifying goals (@remix7531, #1120)
  - [coq] Honour `-Q`, `-R` and `-I` in workspace arguments (@remix7531, #1121)
+ - [coq] Make `Workspace.hash` depend on the load path (@remix7531, #1122)
 
 # coq-lsp 0.2.5: New epoch
 --------------------------

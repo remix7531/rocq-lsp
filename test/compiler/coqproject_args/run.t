@@ -10,15 +10,7 @@ Build a library bound to the logical path Dep
 
 Bind it again, this time through -arg
   $ echo "-R . Proj" > proj/_CoqProject
-  $ echo "-arg \"-Q $PWD/dep Dep\"" >> proj/_CoqProject
+  $ echo "-arg \"-Q dep Dep\"" >> proj/_CoqProject
   $ echo "From Dep Require Import D. Check d." > proj/a.v
-  $ fcc --root proj proj/a.v
-  [message] Configuration loaded from proj/_CoqProject
-   - findlib: [TEST_PATH]
-     + findlib config: [TEST_PATH]
-     + findlib default location: [TEST_PATH]
-   - coqlib is at: [TEST_PATH]
-     + 4 Coq path directory bindings in scope
-     + Modules [Corelib.Init.Prelude] will be loaded by default
-  [message] compiling file proj/a.v
+  $ fcc --display=quiet --root proj proj/a.v
   $ cat proj/a.diags

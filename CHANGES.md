@@ -2,6 +2,7 @@
 ------------------------------
 
  - [petanque] Check `proof_finished` without reifying goals (@remix7531, #1120)
+ - [coq] Make `Workspace.hash` depend on the load path (@remix7531, #1122)
 
 # coq-lsp 0.2.5: New epoch
 --------------------------
